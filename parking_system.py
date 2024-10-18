@@ -217,6 +217,9 @@ class ParkingSystem(tk.Tk):
         ttk.Button(self.account_frame, text="Add Funds (GCash)", command=self.add_funds_gcash).grid(row=2, column=0, padx=5, pady=5)
         ttk.Button(self.account_frame, text="Add Funds (Card)", command=self.add_funds_card).grid(row=2, column=1, padx=5, pady=5)
 
+        # Logout
+        ttk.Button(self.account_frame, text="Logout", command=self.logout).grid(row=3, column=0, columnspan=2, padx=5, pady=5)
+
     def login(self):
         username = self.login_username_var.get()
         password = self.login_password_var.get()
@@ -242,6 +245,11 @@ class ParkingSystem(tk.Tk):
         self.db.add_user(username, password_hash)
         messagebox.showinfo("Success", "Account created successfully")
         self.notebook.select(0)  # Switch to login tab
+
+    def logout(self):
+        self.current_user = None  # Clear the logged-in user
+        messagebox.showinfo("Logout", "You have been logged out successfully.")
+        self.notebook.select(0)  # Switch back to the login tab
 
     def hash_password(self, password):
         return hashlib.sha256(password.encode()).hexdigest()
