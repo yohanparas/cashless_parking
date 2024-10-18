@@ -15,7 +15,6 @@ class ParkingSpot:
     def __init__(self, id):
         self.id = id
         self.is_occupied = False
-        self.is_watched = False
         self.vehicle = None
         self.start_time = None
         self.duration = None
@@ -52,13 +51,6 @@ class ParkingLot:
                 spot.duration = None
                 spot.user = None
                 break
-
-    def toggle_watch(self, spot_id):
-        for spot in self.spots:
-            if spot.id == spot_id:
-                spot.is_watched = not spot.is_watched
-                break
-
 class Database:
     def __init__(self):
         self.conn = sqlite3.connect('parking_system.db')
@@ -179,13 +171,11 @@ class ParkingSystem(tk.Tk):
         ttk.Button(self.parking_frame, text="Park Vehicle", command=self.park_vehicle).grid(row=6, column=0, columnspan=2, padx=5, pady=5)
 
     def create_watch_widgets(self):
-        self.watch_tree = ttk.Treeview(self.watch_frame, columns=("Spot", "Status", "Watched"), show="headings")
+        self.watch_tree = ttk.Treeview(self.watch_frame, columns=("Spot", "Status"), show="headings")
         self.watch_tree.heading("Spot", text="Spot")
         self.watch_tree.heading("Status", text="Status")
-        self.watch_tree.heading("Watched", text="Watched")
         self.watch_tree.grid(row=0, column=0, padx=5, pady=5)
 
-        ttk.Button(self.watch_frame, text="Toggle Watch", command=self.toggle_watch).grid(row=1, column=0, padx=5, pady=5)
         ttk.Button(self.watch_frame, text="Refresh", command=self.update_watch_list).grid(row=2, column=0, padx=5, pady=5)
 
         self.update_watch_list()
@@ -336,18 +326,7 @@ class ParkingSystem(tk.Tk):
 
         for spot in self.parking_lot.spots:
             status = "Occupied" if spot.is_occupied else "Available"
-            watched = "Yes" if spot.is_watched else "No"
-            self.watch_tree.insert("", "end", values=(spot.id, status, watched))
-
-    def toggle_watch(self):
-        selected_item = self.watch_tree.selection()
-        if not selected_item:
-            messagebox.showerror("Error", "Please select a spot to toggle watch status.")
-            return
-
-        spot_id = self.watch_tree.item(selected_item)['values'][0]
-        self.parking_lot.toggle_watch(spot_id)
-        self.update_watch_list()
+            self.watch_tree.insert("", "end", values=(spot.id, status))
 
     def update_exit_spots(self):
         occupied_spots = [spot.id for spot in self.parking_lot.spots if spot.is_occupied]
