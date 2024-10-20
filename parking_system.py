@@ -1,7 +1,7 @@
+# Cashless Parking System
 import tkinter as tk
 from tkinter import ttk, messagebox
-import random
-from datetime import datetime, timedelta
+from datetime import datetime
 import hashlib
 import sqlite3
 
@@ -88,7 +88,7 @@ class Database:
 class ParkingSystem(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Cashless Parking System")
+        self.title("EasyPark")
         self.geometry("800x600")
         self.parking_lot = ParkingLot(10)
         self.rates = {"car": 5, "motorcycle": 3}
@@ -262,7 +262,6 @@ class ParkingSystem(tk.Tk):
             amount = float(self.add_funds_var.get())
             if amount <= 0:
                 raise ValueError
-            # In a real system, you would integrate with the actual payment gateway here
             self.current_user.balance += amount
             self.db.update_balance(self.current_user.username, self.current_user.balance)
             self.update_balance_display()
@@ -312,9 +311,6 @@ class ParkingSystem(tk.Tk):
 
         vehicle = Vehicle(vehicle_type, license_plate)
         self.parking_lot.occupy_spot(spot_id, vehicle, duration, self.current_user)
-        # self.current_user.balance -= cost
-        # self.db.update_balance(self.current_user.username, self.current_user.balance)
-        # self.update_balance_display()
         messagebox.showinfo("Success", f"Vehicle parked in spot {spot_id}.")
         self.update_available_spots()
         self.update_watch_list()
