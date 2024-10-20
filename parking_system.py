@@ -9,7 +9,7 @@ class User:
     def __init__(self, username, password_hash):
         self.username = username
         self.password_hash = password_hash
-        self.balance = 0  # GCash balance
+        self.balance = 0  # Cash balance
 
 class ParkingSpot:
     def __init__(self, id):
@@ -197,7 +197,7 @@ class ParkingSystem(tk.Tk):
 
     def create_account_widgets(self):
         self.balance_var = tk.StringVar()
-        ttk.Label(self.account_frame, text="GCash Balance:").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        ttk.Label(self.account_frame, text="Cash Balance:").grid(row=0, column=0, padx=5, pady=5, sticky="w")
         ttk.Label(self.account_frame, textvariable=self.balance_var).grid(row=0, column=1, padx=5, pady=5)
 
         ttk.Label(self.account_frame, text="Add Funds:").grid(row=1, column=0, padx=5, pady=5, sticky="w")
